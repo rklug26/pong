@@ -1,0 +1,167 @@
+<html>
+    <head>
+        <title>PONG</title>
+        <style>
+
+            html, body {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+            .title {
+                margin-top: 50px;
+                text-align: center;
+            }
+
+            .score {
+                font-size: 24px;
+                font-weight: bold;
+                padding: 20px;
+            }
+
+            canvas {
+                margin-top: 50px;
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                background-color: black;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="title">
+            <h1>PONG</h1>
+            <span class="score">0</span>
+            <span class="score">0</span>
+        </div>
+        <canvas width="900" height="500" id="gameCanvas"></canvas>
+
+        <script type="text/javascript">
+
+            // If this variable is true, it means the user is currently pressing down the 'w' key.
+            let wPressed = false;
+            // If this variable is true, it means that the user is currently pressing down the 's' key.
+            let sPressed = false;
+            // If this variable is true, it means that the user is currently pressing down the up arrow.
+            let upPressed = false;
+            // If this variable is true, it means that the user is currently pressing down the down arrow.
+            let downPressed = false;
+            // This variable holds the current background color of the canvas.
+            let backgroundColor = 'black';
+            // This object holds the position and size of the left player.
+            // Notice that y is 225 because it equals (canvas.height / 2) - (player.height / 2)
+            let player1 = { x: 10, y: 225, width: 10, height: 50 };
+            let player2 = { x: 880, y: 255, width: 10, height: 50 };
+            // This variable holds a reference to the canvas that lives within the html document.
+            let canvas = document.getElementById('gameCanvas');
+
+            // When the page loads...
+            window.onload = function() {
+                // Listen for keydown events
+                document.onkeydown = function (keyEvent) {
+                    // If the key that went down was the 'w' key...
+                    if (keyEvent.key === 'w') {
+                        // Set the wPressed variable to true
+                        wPressed = true;
+                    // Else, if the key that went down was the 's' key...
+                    } else if (keyEvent.key === 's') {
+                        // Set the sPressed variable to true
+                        sPressed = true;
+                    } else if (keyEvent.key === 'ArrowUp') {
+                        upPressed = true;
+                    } else if (keyEvent.key === 'ArrowDown') {
+                        downPressed = true;
+                    }
+                }
+                // Listen for keyup events
+                document.onkeyup = function (keyEvent) {
+                    // If the key that went up was the 'w' key...
+                    if (keyEvent.key === 'w') {
+                        // Set the wPressed variable back to false
+                        wPressed = false;
+                    // Else, if the key that went up was the 's' key...
+                    } else if (keyEvent.key === 's') {
+                        // Set the sPressed variable back to false
+                        sPressed = false;
+                    } if (keyEvent.key === 'ArrowUp') {
+                        upPressed = false;
+                    } else if (keyEvent.key === 'ArrowDown') {
+                        downPressed = false;
+                    }
+                }
+
+                // Start the game loop
+                // This asks the browser to call the update function
+                // every 16 milliseconds.
+                setInterval(update, 16);
+            }
+
+            // Runs one iteration of the game loop
+            function update() {
+                console.log('Game loop is executing.');
+                // We start the game loop by modifying the current game state
+                // based on the current input from the user
+                checkUserInput();
+                // We end the game loop by rendering the current state of the game
+                // to the canvas.
+                render();
+            }
+
+            // Modifies the game state based on the current user input
+            function checkUserInput() {
+                console.log('Checking user input.');
+                if (wPressed) {
+                    // Move the player upwards
+                    player1.y = player1.y - 5;
+                } else if (sPressed) {
+                    // Move the player downwards
+                    player1.y = player1.y + 5
+                        
+                }
+                if (upPressed){
+                    player2.y = player2.y - 5;
+                } else if (downPressed) {
+                    player2.y = player2.y + 5;             
+                     }
+                // Ensure that the player stays within the canvas
+                if (player1.y < 0) {
+                    player1.y = 0;
+                } else if (player1.y + player1.height > canvas.height) {
+                    player1.y = canvas.height - player1.height;
+                } if (player2.y <0) {
+                    player2.y =  0;
+                       
+                } else if (player2.y + player2.height > canvas.height) {
+                    player2.y = canvas.height - player2.height;
+                }
+            }
+
+            // Renders the current state of the game to the canvas
+            function render() {
+                console.log('Rendering');
+                let ctx = canvas.getContext('2d');
+
+                // Draw the background
+                ctx.fillStyle = backgroundColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Render player1
+                ctx.fillStyle = 'white';
+                ctx.fillRect(player1.x, player1.y, player1.width, player1.height);
+                ctx.fillRect(player2.x, player2.y, player2.width, player2.height);
+            }
+            window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
+
+        </script>
+
+    </body>
+</html>
